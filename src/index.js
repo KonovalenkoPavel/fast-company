@@ -1,12 +1,9 @@
-import React, {useState} from 'react'
-import {createRoot} from 'react-dom/client'
-import Users from './components/users'
-
+import React from "react";
+import { createRoot } from "react-dom/client";
+import Users from "./components/users";
 
 const App = () => {
-  
+  return <Users />;
+};
 
-  return <Users />
-}
-
-createRoot(document.getElementById('root')).render(<App/>)
+createRoot(document.getElementById("root")).render(<App />);
