@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const Bookmark = (props) => {
+const Bookmark = () => {
   const [isChacked, setIsChacked] = useState(false);
 
   const handleChange = () => {
