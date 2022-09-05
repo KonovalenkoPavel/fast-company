@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import api from "../api/index";
 import "bootstrap/dist/css/bootstrap.css";
 import User from "./user";
@@ -9,22 +9,33 @@ import GroupList from "./groupList";
 
 const Users = () => {
   const [users, setUsers] = useState(api.users.fetchAll());
-  const [professions] = useState(api.proffesions.fetchAll());
+  const [professions, setProfessions] = useState();
   const count = users.length;
   const pageSize = 4;
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedProf, setSelectedProf] = useState();
   const handlePageChange = (pageIndex) => {
     setCurrentPage(pageIndex);
   };
-
-  const handleProfessionSelect = (params) => {
-    console.log(params);
+  useEffect(() => {
+    api.proffesions.fetchAll().then((data) => setProfessions(data));
+  }, []);
+  const handleProfessionSelect = (item) => {
+    setSelectedProf(item);
   };
-  console.log(professions);
-  const userCrop = paginate(users, currentPage, pageSize);
+  const filteredUsers = selectedProf ? users.filter(user => user.profession === selectedProf) : users;
+  const userCrop = paginate(filteredUsers, currentPage, pageSize);
+  const clearFilter = () => {
+    setSelectedProf();
+  };
+
   return (
     <>
-      <GroupList items={professions} onItemSelect={handleProfessionSelect}/>
+      {professions && (
+        <>
+          <GroupList selectedItem={selectedProf} items={professions} onItemSelect={handleProfessionSelect}/>
+          <button className="btn btn-secondary mt-2" onClick={clearFilter}>очистить</button>
+        </>)}
       <SearchStatus users={users} />
       {users.length > 0 && (
         <table className="table">
